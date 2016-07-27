@@ -93,6 +93,10 @@ export class SortableComponent extends AbstractComponent {
         this.effectCursor = value;
     }
 
+    @Input() dragImage: string | DragImage | Function;
+
+    @Input() cloneItem: boolean;
+
     /**
      * Callback function called when the drag action ends with a valid drop action.
      * It is activated after the on-drop-success callback
