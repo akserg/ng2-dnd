@@ -2,10 +2,8 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/akserg/ng2-dnd
 
-import {Injectable} from '@angular/core';
 import {isString} from './dnd.utils';
 
-@Injectable()
 export class DataTransferEffect {
 
     static COPY = new DataTransferEffect('copy');
@@ -16,7 +14,6 @@ export class DataTransferEffect {
     constructor(public name: string) { }
 }
 
-@Injectable()
 export class DragImage {
     constructor(
         public imageElement: string | HTMLElement,
@@ -31,7 +28,6 @@ export class DragImage {
         }
 }
 
-@Injectable()
 export class DragDropConfig {
     public onDragStartClass: string = "dnd-drag-start";
     public onDragEnterClass: string = "dnd-drag-enter";

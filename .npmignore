@@ -13,7 +13,9 @@ typings.json
 **/*.ts
 **/*.js.map
 !*.d.ts
+!*.metadata.json
 !src/*.d.ts
+!src/*.metadata.json
 !tests/*.d.ts
 .travis.yml
 karma*
