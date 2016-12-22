@@ -13,12 +13,15 @@ typings
 bundles
 src/*.js
 src/*.d.ts
+src/*.metadata.json
 src/*.js.map
 tests/*.js
 tests/*.d.ts
+tests/*.metadata.json
 tests/*.js.map
 index.js
 index.d.ts
+index.metadata.json
 index.js.map
 _test-output
 
