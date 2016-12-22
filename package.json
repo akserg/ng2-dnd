@@ -3,6 +3,7 @@
   "description": "Angular 2 Drag-and-Drop without dependencies",
   "version": "0.0.0-semantically-released",
   "scripts": {
+    "ngc": "ngc -p tsconfig.aot.json --locale=en-US",
     "test": "tsc && karma start",
     "test-watch": "tsc && karma start --no-single-run --auto-watch",
     "minify": "node node_modules/uglify-js/bin/uglifyjs bundles/ng2-dnd.js -o bundles/ng2-dnd.min.js --source-map bundles/ng2-dnd.min.js.map -c -m",
@@ -36,11 +37,12 @@
     "zone.js": "^0.6.23"
   },
   "devDependencies": {
-    "@angular/common": "2.0.0",
-    "@angular/compiler": "2.0.0",
-    "@angular/core": "2.0.0",
-    "@angular/platform-browser": "2.0.0",
-    "@angular/platform-browser-dynamic": "2.0.0",
+    "@angular/common": "2.2.1",
+    "@angular/compiler-cli": "2.2.1",
+    "@angular/compiler": "2.2.1",
+    "@angular/core": "2.2.1",
+    "@angular/platform-browser": "2.2.1",
+    "@angular/platform-browser-dynamic": "2.2.1",
     "commitizen": "^2.7.6",
     "cz-conventional-changelog": "^1.1.5",
     "jasmine-core": "~2.5.1",
