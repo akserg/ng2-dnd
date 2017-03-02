@@ -88,6 +88,9 @@ export abstract class AbstractComponent {
     constructor(elemRef: ElementRef, public _dragDropService: DragDropService, public _config: DragDropConfig,
         private _cdr: ChangeDetectorRef) {
 
+        // Assign default cursor unless overridden
+        this._defaultCursor = _config.defaultCursor;
+
         this._elem = elemRef.nativeElement;
         //
         // DROP events

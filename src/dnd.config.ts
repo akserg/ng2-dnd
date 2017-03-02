@@ -37,5 +37,6 @@ export class DragDropConfig {
     public dragEffect: DataTransferEffect = DataTransferEffect.MOVE;
     public dropEffect: DataTransferEffect = DataTransferEffect.MOVE;
     public dragCursor: string = "move";
-    public dragImage: DragImage;
+    public defaultCursor: string = "pointer";
+    public dragImage: DragImage;    
 }
