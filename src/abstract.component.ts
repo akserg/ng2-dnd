@@ -92,6 +92,8 @@ export abstract class AbstractComponent {
         this._defaultCursor = _config.defaultCursor;
 
         this._elem = elemRef.nativeElement;
+        this._elem.style.cursor = this._defaultCursor;  // set default cursor on our element
+
         //
         // DROP events
         //
