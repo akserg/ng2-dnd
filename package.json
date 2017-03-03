@@ -7,7 +7,7 @@
     "test-watch": "tsc && karma start --no-single-run --auto-watch",
     "commit": "npm run prepublish && npm test && git-cz",
     "prepublish": "ngc && npm run build",
-    "build": "webpack && copy style.css \"bundles/style.css\"",
+    "build": "webpack && cp style.css bundles/style.css",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
