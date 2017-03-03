@@ -1,4 +1,4 @@
-# Angular 2 Drag-and-Drop [![npm version](https://badge.fury.io/js/ng2-dnd.svg)](https://badge.fury.io/js/ng2-dnd) [![npm monthly downloads](https://img.shields.io/npm/dm/ng2-dnd.svg?style=flat-square)](https://www.npmjs.com/package/ng2-dnd)
+# Angular 2 Drag-and-Drop [![npm version](https://badge.fury.io/js/ng2-dnd.svg)](https://badge.fury.io/js/ng2-dnd) [![npm monthly downloads](https://img.shields.io/npm/dm/obosha-ng2-dnd.svg?style=flat-square)](https://www.npmjs.com/package/obosha-ng2-dnd)
 Angular 2 Drag-and-Drop without dependencies.
 
 [![Build Status](https://travis-ci.org/obosha/ng2-dnd.svg?branch=master)](https://travis-ci.org/obosha/ng2-dnd)
