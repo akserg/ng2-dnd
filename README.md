@@ -586,7 +586,7 @@ class Widget {
 ```
 
 # Credits
-- [Francesco Cina](https://github.com/ufoscout)
+- [Francesco Cina](https://github.com/akserg)
 
 # License
  [MIT](/LICENSE)
