@@ -1,7 +1,7 @@
 {
   "name": "obosha-ng2-dnd",
   "description": "Angular 2 Drag-and-Drop",
-  "version": "0.0.0-semantically-released",
+  "version": "0.0.0-development",
   "scripts": {
     "test": "karma start",
     "test-watch": "tsc && karma start --no-single-run --auto-watch",
@@ -64,7 +64,7 @@
     "loader-utils": "~0.2.16",
     "reflect-metadata": "0.1.8",
     "rxjs": "^5.0.3",
-    "semantic-release": "4.3.5",
+    "semantic-release": "^6.3.2",
     "source-map-loader": "0.1.5",
     "ts-helpers": "1.1.2",
     "tslint": "~4.0.0",
