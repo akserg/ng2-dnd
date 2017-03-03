@@ -1,6 +1,6 @@
 // Copyright (C) 2016 Sergey Akopkokhyants
 // This project is licensed under the terms of the MIT license.
-// https://github.com/akserg/ng2-dnd
+// https://github.com/obosha/ng2-dnd
 
 import {Injectable, ChangeDetectorRef} from '@angular/core';
 import {ElementRef} from '@angular/core';
