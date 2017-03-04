@@ -1,6 +1,6 @@
 {
   "name": "obosha-ng2-dnd",
-  "description": "Angular 2 Drag-and-Drop",
+  "description": "Angular 2 Drag-and-Drop - Obosha",
   "version": "0.0.0-development",
   "scripts": {
     "test": "karma start",
