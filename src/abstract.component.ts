@@ -8,6 +8,7 @@ import {ElementRef} from '@angular/core';
 import {DragDropConfig, DragImage} from './dnd.config';
 import {DragDropService} from './dnd.service';
 import {isString, isFunction, isPresent, createImage, callFun} from './dnd.utils';
+import {MobileService} from './dnd.mobile';
 
 @Injectable()
 export abstract class AbstractComponent {
@@ -86,7 +87,7 @@ export abstract class AbstractComponent {
     cloneItem: boolean = false;
 
     constructor(elemRef: ElementRef, public _dragDropService: DragDropService, public _config: DragDropConfig,
-        private _cdr: ChangeDetectorRef) {
+        private _cdr: ChangeDetectorRef, private mobileService: MobileService) {
 
         this._elem = elemRef.nativeElement;
         //
@@ -159,6 +160,34 @@ export abstract class AbstractComponent {
             this._onDragEnd(event);
             // Restore style of dragged element
             this._elem.style.cursor = this._defaultCursor;
+        };
+        
+        // touch events
+        this._elem.ontouchstart = (event: TouchEvent) => {
+            this.mobileService.onTouchStart(event);
+        };
+        this._elem.ontouchend = (event: TouchEvent) => {
+            this.mobileService.onTouchEnd(event);
+        };
+        this._elem.ontouchmove = (event: TouchEvent) => {
+            this.mobileService.onTouchMove(event);
+        };
+        this._elem.ontouchcancel = (event: TouchEvent) => {
+            this.mobileService.onTouchCancel(event);
+        };
+        
+        // touch events
+        this._elem.ontouchstart = (event: TouchEvent) => {
+            this.mobileService.onTouchStart(event);
+        };
+        this._elem.ontouchend = (event: TouchEvent) => {
+            this.mobileService.onTouchEnd(event);
+        };
+        this._elem.ontouchmove = (event: TouchEvent) => {
+            this.mobileService.onTouchMove(event);
+        };
+        this._elem.ontouchcancel = (event: TouchEvent) => {
+            this.mobileService.onTouchCancel(event);
         };
     }
 

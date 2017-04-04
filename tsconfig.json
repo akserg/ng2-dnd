@@ -19,6 +19,7 @@
     "./src/abstract.component.ts",
     "./src/dnd.config.ts",
     "./src/dnd.service.ts",
+    "./src/dnd.mobile.ts",
     "./src/dnd.utils.ts",
     "./src/draggable.component.ts",
     "./src/droppable.component.ts",

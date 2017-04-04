@@ -9,10 +9,12 @@ import {DragDropService, DragDropSortableService, dragDropServiceFactory, dragDr
 import {DraggableComponent} from './src/draggable.component';
 import {DroppableComponent} from './src/droppable.component';
 import {SortableContainer, SortableComponent} from './src/sortable.component';
+import {MobileService, mobileServiceFactory} from './src/dnd.mobile';
 
 export * from './src/abstract.component';
 export * from './src/dnd.config';
 export * from './src/dnd.service';
+export * from './src/dnd.mobile';
 export * from './src/draggable.component';
 export * from './src/droppable.component';
 export * from './src/sortable.component';
@@ -20,7 +22,8 @@ export * from './src/sortable.component';
 export let providers = [
     DragDropConfig,
     { provide: DragDropService, useFactory: dragDropServiceFactory },
-    { provide: DragDropSortableService, useFactory: dragDropSortableServiceFactory, deps: [DragDropConfig] }
+    { provide: DragDropSortableService, useFactory: dragDropSortableServiceFactory, deps: [DragDropConfig] },
+    { provide: MobileService, useFactory: mobileServiceFactory }
 ];
 
 @NgModule({
