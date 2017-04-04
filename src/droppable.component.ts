@@ -1,6 +1,6 @@
-// Copyright (C) 2016 Sergey Akopkokhyants
+// Copyright (C) 2016 Shane Oborn
 // This project is licensed under the terms of the MIT license.
-// https://github.com/akserg/ng2-dnd
+// https://github.com/obosha/ng2-dnd
 
 import {ChangeDetectorRef} from '@angular/core';
 import {Directive, Input, Output, EventEmitter, ElementRef} from '@angular/core';

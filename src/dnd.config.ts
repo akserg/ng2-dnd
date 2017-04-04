@@ -1,6 +1,6 @@
-// Copyright (C) 2016 Sergey Akopkokhyants
+// Copyright (C) 2016 Shane Oborn
 // This project is licensed under the terms of the MIT license.
-// https://github.com/akserg/ng2-dnd
+// https://github.com/obosha/ng2-dnd
 
 import {isString} from './dnd.utils';
 
@@ -37,5 +37,6 @@ export class DragDropConfig {
     public dragEffect: DataTransferEffect = DataTransferEffect.MOVE;
     public dropEffect: DataTransferEffect = DataTransferEffect.MOVE;
     public dragCursor: string = "move";
-    public dragImage: DragImage;
+    public defaultCursor: string = "pointer";
+    public dragImage: DragImage;    
 }

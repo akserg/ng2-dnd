@@ -1,7 +1,7 @@
 {
-  "name": "ng2-dnd",
-  "description": "Angular 2 Drag-and-Drop without dependencies",
-  "version": "0.0.0-semantically-released",
+  "name": "obosha-ng2-dnd",
+  "description": "Angular 2 Drag-and-Drop - Obosha",
+  "version": "0.0.0-development",
   "scripts": {
     "test": "karma start",
     "test-watch": "tsc && karma start --no-single-run --auto-watch",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/akserg/ng2-dnd.git"
+    "url": "https://github.com/obosha/ng2-dnd.git"
   },
   "keywords": [
     "angular",
@@ -22,15 +22,15 @@
     "drop",
     "drag-and-drop"
   ],
-  "author": "Sergey Akopkokhyants <akserg@gmail.com>",
+  "author": "Shane Oborn",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/akserg/ng2-dnd/issues"
+    "url": "https://github.com/obosha/ng2-dnd/issues"
   },
   "main": "bundles/index.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
-  "homepage": "https://github.com/akserg/ng2-dnd#readme",
+  "homepage": "https://github.com/obosha/ng2-dnd#readme",
   "peerDependencies": {
     "@angular/core": "^2.4.4 || ^4.0.0"
   },
@@ -64,7 +64,7 @@
     "loader-utils": "~0.2.16",
     "reflect-metadata": "0.1.8",
     "rxjs": "^5.0.3",
-    "semantic-release": "4.3.5",
+    "semantic-release": "^6.3.2",
     "source-map-loader": "0.1.5",
     "ts-helpers": "1.1.2",
     "tslint": "~4.0.0",
