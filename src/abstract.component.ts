@@ -122,10 +122,15 @@ export abstract class AbstractComponent {
         //
         // Drag events
         //
+        var prevOnMouseDown = this._elem.onmousedown,
+            prevOnDragStart = this._elem.ondragstart,
+          prevOnDragEnd = this._elem.ondragend;
         this._elem.onmousedown = (event: MouseEvent) => {
+            prevOnMouseDown && prevOnMouseDown(event);
             this._target = event.target;
         };
         this._elem.ondragstart = (event: DragEvent) => {
+            prevOnDragStart && prevOnDragStart(event);
             if (this._dragHandle) {
                 if (!this._dragHandle.contains(<Element>this._target)) {
                     event.preventDefault();
@@ -174,6 +179,7 @@ export abstract class AbstractComponent {
         };
 
         this._elem.ondragend = (event: Event) => {
+            prevOnDragEnd && prevOnDragEnd(event);
             if (this._elem.parentElement && this._dragHelper) {
                 this._elem.parentElement.removeChild(this._dragHelper);
             }
