@@ -141,8 +141,11 @@ export abstract class AbstractComponent {
                     return;
                 }
             }
-
+            if (this._dragDropService.firstDragData) { // process only first element in hierarhy
+              return ;
+            }
             this._onDragStart(event);
+            this._dragDropService.firstDragData = this._dragDropService.dragData;
             //
             if (event.dataTransfer != null) {
                 event.dataTransfer.setData('text', '');
@@ -194,6 +197,7 @@ export abstract class AbstractComponent {
             // Restore style of dragged element
             let cursorelem = (this._dragHandle) ? this._dragHandle : this._elem;
             cursorelem.style.cursor = this._defaultCursor;
+            this._dragDropService.firstDragData = null;
         };
     }
 

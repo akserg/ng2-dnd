@@ -8,11 +8,12 @@
     "commit": "npm run prepublish && npm test && git-cz",
     "prepublish": "ngc && npm run build",
     "build": "webpack && cp style.css bundles/style.css",
+    "watch": "ntsc -w",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/akserg/ng2-dnd.git"
+    "url": "https://github.com/vstrizhenok/ng2-dnd.git"
   },
   "keywords": [
     "angular",
@@ -25,12 +26,12 @@
   "author": "Sergey Akopkokhyants <akserg@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/akserg/ng2-dnd/issues"
+    "url": "https://github.com/vstrizhenok/ng2-dnd/issues"
   },
   "main": "bundles/index.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
-  "homepage": "https://github.com/akserg/ng2-dnd#readme",
+  "homepage": "https://github.com/vstrizhenok/ng2-dnd#readme",
   "peerDependencies": {
     "@angular/core": "^2.4.4 || ^4.0.0"
   },
