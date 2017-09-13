@@ -25,6 +25,7 @@ export class MDndDroppableDirective {
     this.onMDragLeave = new EventEmitter();
     this.onMDragOver = new EventEmitter();
 
+    this._events = {};
     this.storeElemEvents();
     this._super = new DroppableComponent(elemRef, dragDropService, config, cdr);
     this.bindEvents();
@@ -45,7 +46,10 @@ export class MDndDroppableDirective {
   }
 
   private storeElemEvents() {
-    let elem = this.elemRef.nativeElement;
+    let elem = this.elemRef ? this.elemRef.nativeElement : null;
+    if (!elem) {
+      return ;
+    }
     this._events = {
       // drag events
       'onmousedown': elem.onmousedown,
@@ -61,11 +65,11 @@ export class MDndDroppableDirective {
 
   private bindElemEvents() {
     let elem = this.elemRef.nativeElement,
-      handler = (elem, eventName, prevHandler) => {
-          let curHandler = elem[eventName];
-          elem[eventName] = function (event) {
-            prevHandler && prevHandler(event);
-            curHandler && curHandler(event);
+      handler = (elem: any, eventName: any, prevHandler: any) => {
+          let curHandler = elem ? elem[eventName] : null;
+          elem[eventName] = function (event: Event) {
+            prevHandler instanceof Function && prevHandler(event);
+            curHandler instanceof Function && curHandler(event);
           };
       }, eventName;
 

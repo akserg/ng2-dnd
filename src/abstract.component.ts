@@ -122,19 +122,11 @@ export abstract class AbstractComponent {
         //
         // Drag events
         //
-        let prevOnMouseDown: (ev: Event) => any = this._elem.onmousedown,
-            prevOnDragStart: (ev: Event) => any = this._elem.ondragstart,
-            prevOnDragEnd: (ev: Event) => any = this._elem.ondragend;
-        this._elem.onmousedown = (event: MouseEvent) => {
-            if (prevOnMouseDown instanceof Function) {
-                 prevOnMouseDown(event); 
-            }
-            this._target = event.target;
-        };
-        this._elem.ondragstart = (event: DragEvent) => {
-            if (prevOnDragStart instanceof Function) {
-                 prevOnDragStart(event);
-            }
+      this._elem.addEventListener('mousedown', (event: MouseEvent) => {
+        this._target = event.target;
+      }, false);
+
+        this._elem.addEventListener('dragstart', (event: DragEvent) => {
             if (this._dragHandle) {
                 if (!this._dragHandle.contains(<Element>this._target)) {
                     event.preventDefault();
@@ -183,22 +175,18 @@ export abstract class AbstractComponent {
                     cursorelem.style.cursor = this._defaultCursor;
                 }
             }
-        };
+        });
 
-        this._elem.ondragend = (event: Event) => {
-            if (prevOnDragEnd instanceof Function) {
-                 prevOnDragEnd(event);
-            }
+        this._elem.addEventListener('dragend', (event: Event) => {
             if (this._elem.parentElement && this._dragHelper) {
                 this._elem.parentElement.removeChild(this._dragHelper);
             }
-            // console.log('ondragend', event.target);
             this._onDragEnd(event);
             // Restore style of dragged element
             let cursorelem = (this._dragHandle) ? this._dragHandle : this._elem;
             cursorelem.style.cursor = this._defaultCursor;
             this._dragDropService.firstDragData = null;
-        };
+        });
     }
 
     public setDragHandle(elem: HTMLElement) {
