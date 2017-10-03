@@ -22,6 +22,7 @@ export class DragDropService {
     allowedDropZones: Array<string> = [];
     onDragSuccessCallback: EventEmitter<DragDropData>;
     dragData: any;
+    firstDragData: any;
     isDragged: boolean;
 }
 

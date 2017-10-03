@@ -12,22 +12,13 @@
       "jasmine",
       "node"
     ],
-    "lib": ["es2015", "dom"]
+    "lib": ["es2015", "dom"],
+    "removeComments": true,
+    "sourceMap": true
   },
-  "files": [
-    "index.ts",
-    "./src/abstract.component.ts",
-    "./src/dnd.config.ts",
-    "./src/dnd.service.ts",
-    "./src/dnd.utils.ts",
-    "./src/draggable.component.ts",
-    "./src/droppable.component.ts",
-    "./src/sortable.component.ts",
-
-    "./tests/dnd.component.factory.ts",
-    "./tests/dnd.sortable.spec.ts",
-    "./tests/dnd.with.draggable.data.spec.ts",
-    "./tests/dnd.without.draggable.data.spec.ts"
+  "compileOnSave": true,
+  "include": [
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",

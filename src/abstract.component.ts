@@ -122,18 +122,22 @@ export abstract class AbstractComponent {
         //
         // Drag events
         //
-        this._elem.onmousedown = (event: MouseEvent) => {
-            this._target = event.target;
-        };
-        this._elem.ondragstart = (event: DragEvent) => {
+      this._elem.addEventListener('mousedown', (event: MouseEvent) => {
+        this._target = event.target;
+      }, false);
+
+        this._elem.addEventListener('dragstart', (event: DragEvent) => {
             if (this._dragHandle) {
                 if (!this._dragHandle.contains(<Element>this._target)) {
                     event.preventDefault();
                     return;
                 }
             }
-
+            if (this._dragDropService.firstDragData) { // process only first element in hierarhy
+              return ;
+            }
             this._onDragStart(event);
+            this._dragDropService.firstDragData = this._dragDropService.dragData;
             //
             if (event.dataTransfer != null) {
                 event.dataTransfer.setData('text', '');
@@ -171,18 +175,18 @@ export abstract class AbstractComponent {
                     cursorelem.style.cursor = this._defaultCursor;
                 }
             }
-        };
+        });
 
-        this._elem.ondragend = (event: Event) => {
+        this._elem.addEventListener('dragend', (event: Event) => {
             if (this._elem.parentElement && this._dragHelper) {
                 this._elem.parentElement.removeChild(this._dragHelper);
             }
-            // console.log('ondragend', event.target);
             this._onDragEnd(event);
             // Restore style of dragged element
             let cursorelem = (this._dragHandle) ? this._dragHandle : this._elem;
             cursorelem.style.cursor = this._defaultCursor;
-        };
+            this._dragDropService.firstDragData = null;
+        });
     }
 
     public setDragHandle(elem: HTMLElement) {
