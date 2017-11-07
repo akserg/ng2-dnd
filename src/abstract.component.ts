@@ -2,7 +2,7 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/akserg/ng2-dnd
 
-import {Injectable, ChangeDetectorRef, ViewRef} from '@angular/core';
+import {Injectable, ChangeDetectorRef, ViewRef, OnDestroy} from '@angular/core';
 import {ElementRef} from '@angular/core';
 
 import { DragDropConfig, DragImage } from './dnd.config';
@@ -12,7 +12,7 @@ import { isString, isFunction, isPresent, createImage, callFun } from './dnd.uti
 @Injectable()
 export abstract class AbstractComponent {
     _elem: HTMLElement;
-    _dragHandle: HTMLElement;
+    _dragHandle: HTMLElement | undefined;
     _dragHelper: HTMLElement;
     _defaultCursor: string;
 
@@ -185,7 +185,7 @@ export abstract class AbstractComponent {
         };
     }
 
-    public setDragHandle(elem: HTMLElement) {
+    public setDragHandle(elem: HTMLElement | undefined) {
         this._dragHandle = elem;
     }
     /******* Change detection ******/
@@ -300,11 +300,15 @@ export abstract class AbstractComponent {
     _onDragEndCallback(event: Event) { }
 }
 
-export class AbstractHandleComponent {
+export class AbstractHandleComponent implements OnDestroy {
     _elem: HTMLElement;
     constructor(elemRef: ElementRef, public _dragDropService: DragDropService, public _config: DragDropConfig,
         private _Component: AbstractComponent, private _cdr: ChangeDetectorRef) {
         this._elem = elemRef.nativeElement;
         this._Component.setDragHandle(this._elem);
+    }
+
+    ngOnDestroy() {
+        this._Component.setDragHandle(undefined);
     }
 }
