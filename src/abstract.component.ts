@@ -27,7 +27,12 @@ export abstract class AbstractComponent {
     private _dragEnabled: boolean = false;
     set dragEnabled(enabled: boolean) {
         this._dragEnabled = !!enabled;
-        this._elem.draggable = this._dragEnabled;
+        let cursorelem = this._elem;
+        if(this._dragHandle) {
+            cursorelem = this._dragHandle;
+            this._elem.draggable = undefined;
+        }
+        cursorelem.draggable = this._dragEnabled;
     }
     get dragEnabled(): boolean {
         return this._dragEnabled;
@@ -119,13 +124,22 @@ export abstract class AbstractComponent {
         this._elem.ondrop = (event: Event) => {
             this._onDrop(event);
         };
+        setTimeout(() => {
+            if(!this._elem.querySelector('[dnd-sortable-handle]')) {
+                this.bindDragging(this._elem);
+            }
+        })
+
+    }
+
+    bindDragging(elem: HTMLElement) {
         //
         // Drag events
         //
-        this._elem.onmousedown = (event: MouseEvent) => {
+        elem.onmousedown = (event: MouseEvent) => {
             this._target = event.target;
         };
-        this._elem.ondragstart = (event: DragEvent) => {
+        elem.ondragstart = (event: DragEvent) => {
             if (this._dragHandle) {
                 if (!this._dragHandle.contains(<Element>this._target)) {
                     event.preventDefault();
@@ -173,7 +187,7 @@ export abstract class AbstractComponent {
             }
         };
 
-        this._elem.ondragend = (event: Event) => {
+        elem.ondragend = (event: Event) => {
             if (this._elem.parentElement && this._dragHelper) {
                 this._elem.parentElement.removeChild(this._dragHelper);
             }
@@ -187,6 +201,8 @@ export abstract class AbstractComponent {
 
     public setDragHandle(elem: HTMLElement) {
         this._dragHandle = elem;
+        this.bindDragging(elem);
+        this.dragEnabled = this._dragEnabled;
     }
     /******* Change detection ******/
 
