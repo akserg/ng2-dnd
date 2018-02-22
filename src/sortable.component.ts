@@ -179,7 +179,11 @@ export class SortableComponent extends AbstractComponent {
         this._sortableDataService.isDragged = true;
         this._sortableDataService.sortableContainer = this._sortableContainer;
         this._sortableDataService.index = this.index;
-        this._sortableDataService.markSortable(this._elem);
+        setTimeout(() => {
+            // The DOM changes when adding the CSS class, so we need to add the setTimeout for Chrome
+            // see https://stackoverflow.com/questions/19639969/html5-dragend-event-firing-immediately
+            this._sortableDataService.markSortable(this._elem);
+        });
         // Add dragData
         this._dragDropService.isDragged = true;
         this._dragDropService.dragData = this.dragData;
