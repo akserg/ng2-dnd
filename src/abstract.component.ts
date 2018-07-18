@@ -136,7 +136,11 @@ export abstract class AbstractComponent {
             this._onDragStart(event);
             //
             if (event.dataTransfer != null) {
-                event.dataTransfer.setData('text', '');
+
+                if (!event.dataTransfer.getData('text')) {
+                    event.dataTransfer.setData('text', '');
+                }
+
                 // Change drag effect
                 event.dataTransfer.effectAllowed = this.effectAllowed || this._config.dragEffect.name;
                 // Change drag image
