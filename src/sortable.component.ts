@@ -3,7 +3,7 @@
 // https://github.com/akserg/ng2-dnd
 
 import {ChangeDetectorRef} from '@angular/core';
-import {Directive, Input, Output, EventEmitter, ElementRef} from '@angular/core';
+import {Directive, Input, Output, EventEmitter, ElementRef, NgZone} from '@angular/core';
 import {FormArray} from '@angular/forms';
 
 import {AbstractComponent, AbstractHandleComponent} from './abstract.component';
@@ -40,9 +40,9 @@ export class SortableContainer extends AbstractComponent {
     }
 
     constructor(elemRef: ElementRef, dragDropService: DragDropService, config:DragDropConfig, cdr:ChangeDetectorRef,
-        private _sortableDataService: DragDropSortableService) {
+        private _sortableDataService: DragDropSortableService, private zone: NgZone) {
 
-        super(elemRef, dragDropService, config, cdr);
+        super(elemRef, dragDropService, config, cdr, zone);
         this.dragEnabled = false;
     }
 
@@ -167,8 +167,8 @@ export class SortableComponent extends AbstractComponent {
     constructor(elemRef: ElementRef, dragDropService: DragDropService, config:DragDropConfig,
         private _sortableContainer: SortableContainer,
         private _sortableDataService: DragDropSortableService,
-        cdr:ChangeDetectorRef) {
-        super(elemRef, dragDropService, config, cdr);
+        cdr:ChangeDetectorRef, zone: NgZone) {
+        super(elemRef, dragDropService, config, cdr, zone);
         this.dropZones = this._sortableContainer.dropZones;
         this.dragEnabled = true;
         this.dropEnabled = true;
