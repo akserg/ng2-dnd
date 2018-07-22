@@ -3,7 +3,7 @@
 // https://github.com/akserg/ng2-dnd
 
 import {ChangeDetectorRef} from '@angular/core';
-import {Directive, Input, Output, EventEmitter, ElementRef} from '@angular/core';
+import {Directive, Input, Output, EventEmitter, ElementRef, NgZone} from '@angular/core';
 
 import {AbstractComponent} from './abstract.component';
 import {DragDropConfig} from './dnd.config';
@@ -48,9 +48,9 @@ export class DroppableComponent extends AbstractComponent {
     }
 
     constructor(elemRef: ElementRef, dragDropService: DragDropService, config:DragDropConfig,
-        cdr:ChangeDetectorRef) {
+        cdr:ChangeDetectorRef, zone:NgZone) {
 
-        super(elemRef, dragDropService, config, cdr);
+        super(elemRef, dragDropService, config, cdr, zone);
 
         this.dropEnabled = true;
     }

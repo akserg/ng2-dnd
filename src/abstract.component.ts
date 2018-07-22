@@ -2,7 +2,7 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/akserg/ng2-dnd
 
-import {Injectable, ChangeDetectorRef, ViewRef} from '@angular/core';
+import {Injectable, ChangeDetectorRef, ViewRef, NgZone} from '@angular/core';
 import {ElementRef} from '@angular/core';
 
 import { DragDropConfig, DragImage } from './dnd.config';
@@ -92,7 +92,7 @@ export abstract class AbstractComponent {
     cloneItem: boolean = false;
 
     constructor(elemRef: ElementRef, public _dragDropService: DragDropService, public _config: DragDropConfig,
-        private _cdr: ChangeDetectorRef) {
+        private _cdr: ChangeDetectorRef, public _ngZone: NgZone) {
 
         // Assign default cursor unless overridden
         this._defaultCursor = _config.defaultCursor;
@@ -101,21 +101,25 @@ export abstract class AbstractComponent {
         //
         // DROP events
         //
-        this._elem.ondragenter = (event: Event) => {
-            this._onDragEnter(event);
-        };
-        this._elem.ondragover = (event: DragEvent) => {
-            this._onDragOver(event);
-            //
-            if (event.dataTransfer != null) {
-                event.dataTransfer.dropEffect = this._config.dropEffect.name;
-            }
-
-            return false;
-        };
-        this._elem.ondragleave = (event: Event) => {
-            this._onDragLeave(event);
-        };
+        this._ngZone.runOutsideAngular(() => {
+            this._elem.ondragenter = (event: Event) => {
+                this._onDragEnter(event);
+            };
+        })
+        this._ngZone.runOutsideAngular(() => {
+            this._elem.ondragover = (event: DragEvent) => {
+                this._onDragOver(event);
+                if (event.dataTransfer) {
+                    event.dataTransfer.dropEffect = this._config.dropEffect.name;
+                }
+                return false;
+            };
+        });
+        this._ngZone.runOutsideAngular(() => {
+            this._elem.ondragleave = (event: Event) => {
+                this._onDragLeave(event);
+            };
+        })
         this._elem.ondrop = (event: Event) => {
             this._onDrop(event);
         };
