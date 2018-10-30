@@ -1,54 +1,63 @@
-# Angular 2 Drag-and-Drop [![npm version](https://badge.fury.io/js/ng2-dnd.svg)](https://badge.fury.io/js/ng2-dnd) [![npm monthly downloads](https://img.shields.io/npm/dm/ng2-dnd.svg?style=flat-square)](https://www.npmjs.com/package/ng2-dnd)
-Angular 2 Drag-and-Drop without dependencies.
+# Angular 6 Drag-and-Drop
 
-Follow me [![twitter](https://img.shields.io/twitter/follow/akopkokhyants.svg?style=social&label=%20akopkokhyants)](https://twitter.com/akopkokhyants) to be notified about new releases.
+Angular 6 Drag-and-Drop without dependencies.
 
-[![Build Status](https://travis-ci.org/akserg/ng2-dnd.svg?branch=master)](https://travis-ci.org/akserg/ng2-dnd)
-[![Dependency Status](https://david-dm.org/akserg/ng2-dnd.svg)](https://david-dm.org/akserg/ng2-dnd)
-[![devDependency Status](https://david-dm.org/akserg/ng2-dnd/dev-status.svg)](https://david-dm.org/akserg/ng2-dnd#info=devDependencies)
-[![Known Vulnerabilities](https://snyk.io/test/github/akserg/ng2-dnd/badge.svg)](https://snyk.io/test/github/akserg/ng2-dnd)
+Forked from [Sergey Akopkokhyants - https://github.com/akserg/ng2-dnd](https://github.com/akserg/ng2-dnd).
+
+[![Build Status](https://travis-ci.org/churchs19/ng2-dnd.svg?branch=master)](https://travis-ci.org/churchs19/ng2-dnd)
+[![Dependency Status](https://david-dm.org/churchs19/ng2-dnd.svg)](https://david-dm.org/churchs19/ng2-dnd)
+[![devDependency Status](https://david-dm.org/churchs19/ng2-dnd/dev-status.svg)](https://david-dm.org/churchs19/ng2-dnd#info=devDependencies)
+[![Known Vulnerabilities](https://snyk.io/test/github/churchs19/ng2-dnd/badge.svg)](https://snyk.io/test/github/churchs19/ng2-dnd)
 
 _Some of these APIs and Components are not final and are subject to change!_
 
 ## Transpilation to Angular Package Format
+
 The library uses [ng-packagr](https://github.com/dherges/ng-packagr) to transpile into the Angular Package Format:
+
 - Bundles library in `FESM2015`, `FESM5`, and `UMD` formats
+
 - The npm package can be consumed by `Angular CLI`, `Webpack`, or `SystemJS`
 - Creates type definitions (`.d.ts`)
 - Generates Ahead-of-Time metadata (`.metadata.json`)
 - Auto-discovers and bundles secondary entry points such as `@my/foo`, `@my/foo/testing`, `@my/foo/bar`
 
 ## Installation
+
 ```bash
-npm install ng2-dnd --save
+npm install @stineseed/ng2-dnd --save
 ```
 
-## Demo
+## Demos (From original repo by Sergey Akopkokhyants)
+
 - Webpack demo available [here](https://angular-dxqjhj.stackblitz.io)
 - SystemJS demo available [here](http://embed.plnkr.co/JbG8Si)
 
 ## Usage
+
 If you use SystemJS to load your files, you might have to update your config:
 
 ```js
 System.config({
     map: {
-        'ng2-dnd': 'node_modules/ng2-dnd/bundles/ng2-dnd.umd.js'
+        'ng2-dnd': 'node_modules/@stineseed/ng2-dnd/bundles/ng2-dnd.umd.js'
     }
 });
 ```
 
-#### 1. Add the default styles
-- Import the `style.css` into your web page from `node_modules/ng2-dnd/bundles/style.css`
+### 1. Add the default styles
 
-#### 2. Import the `DndModule`
-Import `DndModule.forRoot()` in the NgModule of your application. 
+- Import the `style.css` into your web page from `node_modules/@stineseed/ng2-dnd/bundles/style.css`
+
+### 2. Import the `DndModule`
+
+Import `DndModule.forRoot()` in the NgModule of your application.
 The `forRoot` method is a convention for modules that provide a singleton service.
 
 ```ts
 import {BrowserModule} from "@angular/platform-browser";
 import {NgModule} from '@angular/core';
-import {DndModule} from 'ng2-dnd';
+import {DndModule} from '@stineseed/ng2-dnd';
 
 @NgModule({
     imports: [
@@ -61,7 +70,7 @@ export class AppModule {
 }
 ```
 
-If you have multiple NgModules and you use one as a shared NgModule (that you import in all of your other NgModules), 
+If you have multiple NgModules and you use one as a shared NgModule (that you import in all of your other NgModules),
 don't forget that you can use it to export the `DndModule` that you imported in order to avoid having to import it multiple times.
 
 ```ts
@@ -76,7 +85,7 @@ export class SharedModule {
 }
 ```
 
-#### 3. Use Drag-and-Drop operations with no code
+### 3. Use Drag-and-Drop operations with no code
 
 ```js
 import {Component} from '@angular/core';
@@ -113,7 +122,7 @@ export class SimpleDndComponent {
 }
 ```
 
-#### 4. Add handle to restrict draggable zone of component
+### 4. Add handle to restrict draggable zone of component
 
 ```js
 import {Component} from '@angular/core';
@@ -153,7 +162,8 @@ export class SimpleDndHandleComponent {
 }
 ```
 
-#### 5. Restriction Drag-and-Drop operations with drop zones
+### 5. Restriction Drag-and-Drop operations with drop zones
+
 You can use property *dropZones* (actually an array) to specify in which place you would like to drop the draggable element:
 
 ```js
@@ -214,6 +224,7 @@ export class ZoneDndComponent {
 ```
 
 #### 6. Transfer custom data via Drag-and-Drop
+
 You can transfer data from draggable to droppable component via *dragData* property of Draggable component:
 
 ```js
@@ -257,7 +268,8 @@ export class CustomDataDndComponent {
 }
 ```
 
-#### 7. Use a custom function to determine where dropping is allowed
+### 7. Use a custom function to determine where dropping is allowed
+
 For use-cases when a static set of `dropZone`s is not possible, a custom function can be used to dynamically determine whether an item can be dropped or not. To achieve that, set the `allowDrop` property to this boolean function.
 
 In the following example, we have two containers that only accept numbers that are multiples of a user-input base integer. `dropZone`s are not helpful here because they are static, whereas the user input is dynamic.
@@ -341,7 +353,8 @@ export class CustomFunctionDndComponent {
 }
 ```
 
-#### 8. Shopping basket with Drag-and-Drop
+### 8. Shopping basket with Drag-and-Drop
+
 Here is an example of shopping backet with products adding via drag and drop operation:
 
 ```js
@@ -427,7 +440,8 @@ class Product {
 }
 ```
 
-#### 9. Simple sortable with Drag-and-Drop
+### 9. Simple sortable with Drag-and-Drop
+
 Here is an example of simple sortable of favorite drinks moving in container via drag and drop operation:
 
 ```js
@@ -465,8 +479,8 @@ export class SimpleSortableComponent {
 }
 ```
 
+### 10. Simple sortable with Drag-and-Drop handle
 
-#### 10. Simple sortable with Drag-and-Drop handle
 Add handle to restict grip zone of sortable component.
 
 ```js
@@ -507,7 +521,8 @@ export class SimpleSortableHandleComponent {
 }
 ```
 
-#### 11. Simple sortable With Drop into recycle bin
+### 11. Simple sortable With Drop into recycle bin
+
 Here is an example of multi list sortable of boxers moving in container and between containers via drag and drop operation:
 
 ```js
@@ -549,7 +564,8 @@ export class RecycleMultiSortableComponent {
 }
 ```
 
-#### 12. Simple sortable With Drop into something, without delete it
+### 12. Simple sortable With Drop into something, without delete it
+
 Here is an example of simple sortable list of items copying in target container:
 
 ```js
@@ -606,7 +622,8 @@ class Widget {
 }
 ```
 
-#### 13. Multi list sortable between containers
+### 13. Multi list sortable between containers
+
 Here is an example of multi list sortable of boxers moving in container and between containers via drag and drop operation:
 
 ```js
@@ -679,7 +696,8 @@ class Widget {
 }
 ```
 
-#### 14. Simple FormArray sortable with Drag-and-Drop
+### 14. Simple FormArray sortable with Drag-and-Drop
+
 Here is an example of simple sortable of favorite drinks moving in container via drag and drop operation but using FormArray instead of Array:
 
 ```js
@@ -724,9 +742,9 @@ export class SimpleFormArraySortableComponent {
 }
 ```
 
-## How to pass multiple data in dragData while dragging ?
+## How to pass multiple data in dragData while dragging
 
-1) As an array: 
+1) As an array:
 
 ``` html
 [dragData]="[aComponent,'component-in-bar']"
@@ -734,12 +752,14 @@ export class SimpleFormArraySortableComponent {
 
 ``` javascript
 loadComponent($event){
-    console.log($event.dragData[0]); // aComponent 
-    console.log($event.dragData[1]); // 'component-in-bar' OR 'component-in-designer' 
+    console.log($event.dragData[0]); // aComponent
+    console.log($event.dragData[1]); // 'component-in-bar' OR 'component-in-designer'
 }
 ```
 
-2) As an object: 
+<!-- markdownlint-disable MD029 -->
+2) As an object:
+<!-- markdownlint-enable MD029 -->
 
 ``` html
 [dragData]="{component: aComponent, location: 'component-in-bar'}"
@@ -747,19 +767,19 @@ loadComponent($event){
 
 ``` javascript
 loadComponent($event){
-    console.log($event.dragData.component); // aComponent 
-    console.log($event.dragData.location); // 'component-in-bar' OR 'component-in-designer' 
+    console.log($event.dragData.component); // aComponent
+    console.log($event.dragData.location); // 'component-in-bar' OR 'component-in-designer'
 }
 ```
 
-# Retreiving files in a drop zone
+### Retreiving files in a drop zone
 
 Since it is possible to drag and drop one or more files to a drop zone, you need to handle the incoming files.
 
 ```js
 import {Component} from '@angular/core';
 import {Http, Headers} from '@angular/http';
-import {DND_PROVIDERS, DND_DIRECTIVES} from 'ng2-dnd/ng2-dnd';
+import {DND_PROVIDERS, DND_DIRECTIVES} from '@stineseed/ng2-dnd/ng2-dnd';
 import {bootstrap} from '@angular/platform-browser-dynamic';
 
 bootstrap(AppComponent, [
@@ -772,7 +792,6 @@ bootstrap(AppComponent, [
     template: `
 <h4>Simple Drag-and-Drop</h4>
 <div class="row">
-   
     <div class="col-sm-3">
         <div dnd-droppable class="panel panel-info"
             (onDropSuccess)="transferDataSuccess($event)">>
@@ -800,7 +819,7 @@ export class AppComponent {
     // loading the FileList from the dataTransfer
     let dataTransfer: DataTransfer = $event.mouseEvent.dataTransfer;
     if (dataTransfer && dataTransfer.files) {
-      
+
       // needed to support posting binaries and usual form values
       let headers = new Headers();
       headers.append('Content-Type', 'multipart/form-data');
@@ -837,6 +856,7 @@ export class AppComponent {
 }
 
 # Credits
+- [Sergey Akopkokhyants](https://github.com/akserg/ng2-dnd)
 - [Francesco Cina](https://github.com/ufoscout)
 - [Valerii Kuznetsov](https://github.com/solival)
 - [Shane Oborn](https://github.com/obosha)
