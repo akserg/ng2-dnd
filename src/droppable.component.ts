@@ -62,13 +62,6 @@ export class DroppableComponent extends AbstractComponent {
         }
     }
 
-    _onDragOverCallback (event: MouseEvent) {
-        if (this._dragDropService.isDragged) {
-            this._elem.classList.add(this._config.onDragOverClass);
-            this.onDragOver.emit({dragData: this._dragDropService.dragData, mouseEvent: event});
-        }
-    };
-
     _onDragLeaveCallback (event: MouseEvent) {
         if (this._dragDropService.isDragged) {
             this._elem.classList.remove(this._config.onDragOverClass);
