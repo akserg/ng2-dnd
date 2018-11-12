@@ -104,7 +104,15 @@ export abstract class AbstractComponent {
         this._elem.ondragenter = (event: Event) => {
             this._onDragEnter(event);
         };
+        this._elem.ondragover = (event: DragEvent) => {
+            this._onDragOver(event);
+            //
+            if (event.dataTransfer != null) {
+                event.dataTransfer.dropEffect = this._config.dropEffect.name;
+            }
 
+            return false;
+        };
         this._elem.ondragleave = (event: Event) => {
             this._onDragLeave(event);
         };
@@ -198,16 +206,22 @@ export abstract class AbstractComponent {
     //****** Droppable *******//
     private _onDragEnter(event: Event): void {
         // console.log('ondragenter._isDropAllowed', this._isDropAllowed);
-        let dataTransfer = (event as any).dataTransfer;
         if (this._isDropAllowed(event)) {
-
-            dataTransfer.effectAllowed = "move"
-            dataTransfer.dropEffect = "move"
             // event.preventDefault();
             this._onDragEnterCallback(event);
-        } else {
-            dataTransfer.effectAllowed = "none"
-            dataTransfer.dropEffect = "none"
+        }
+    }
+
+    private _onDragOver(event: Event) {
+        // // console.log('ondragover._isDropAllowed', this._isDropAllowed);
+        if (this._isDropAllowed(event)) {
+            // The element is over the same source element - do nothing
+            if (event.preventDefault) {
+                // Necessary. Allows us to drop.
+                event.preventDefault();
+            }
+
+            this._onDragOverCallback(event);
         }
     }
 
@@ -281,6 +295,7 @@ export abstract class AbstractComponent {
 
     //**** Drop Callbacks ****//
     _onDragEnterCallback(event: Event) { }
+    _onDragOverCallback(event: Event) { }
     _onDragLeaveCallback(event: Event) { }
     _onDropCallback(event: Event) { }
 
