@@ -39,6 +39,9 @@ export class SortableContainer extends AbstractComponent {
         this.dropZones = value;
     }
 
+    @Output() onItemRemoved: EventEmitter<SortableItem> = new EventEmitter<SortableItem>();
+    @Output() onItemInserted: EventEmitter<SortableItem> = new EventEmitter<SortableItem>();
+
     constructor(elemRef: ElementRef, dragDropService: DragDropService, config:DragDropConfig, cdr:ChangeDetectorRef,
         private _sortableDataService: DragDropSortableService) {
 
@@ -77,11 +80,14 @@ export class SortableContainer extends AbstractComponent {
     }
 
     removeItemAt(index: number): void {
+        const item = this.getItemAt(index);
         this.sortableHandler.removeItemAt(this._sortableData, index);
+        this.onItemRemoved.emit({item: item, index: index});
     }
 
     insertItemAt(item: any, index: number) {
         this.sortableHandler.insertItemAt(this._sortableData, item, index);
+        this.onItemInserted.emit({item: item, index: index});
     }
 }
 
@@ -258,4 +264,9 @@ export class SortableHandleComponent extends AbstractHandleComponent {
 
         super(elemRef, dragDropService, config, _Component, cdr);
     }
+}
+
+export class SortableItem {
+    item: any;
+    index: number;
 }
