@@ -163,6 +163,9 @@ export class SortableComponent extends AbstractComponent {
     @Output("onDragOver") onDragOverCallback: EventEmitter<any> = new EventEmitter<any>();
     @Output("onDragEnd") onDragEndCallback: EventEmitter<any> = new EventEmitter<any>();
     @Output("onDropSuccess") onDropSuccessCallback: EventEmitter<any> = new EventEmitter<any>();
+    
+    // Emits when sortable data is modified.
+    @Output("onListReorder") onListReorderCallback = new EventEmitter<void>();
 
     constructor(elemRef: ElementRef, dragDropService: DragDropService, config:DragDropConfig,
         private _sortableContainer: SortableContainer,
@@ -233,6 +236,7 @@ export class SortableComponent extends AbstractComponent {
                 this._sortableDataService.sortableContainer = this._sortableContainer;
                 this._sortableDataService.index = this.index;
                 this.detectChanges();
+                this.onListReorderCallback.emit();
             }
         }
     }
