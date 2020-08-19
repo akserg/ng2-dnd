@@ -142,9 +142,9 @@ export abstract class AbstractComponent {
                 // Change drag image
                 if (isPresent(this.dragImage)) {
                     if (isString(this.dragImage)) {
-                        (<any>event.dataTransfer).setDragImage(createImage(<string>this.dragImage));
+                        (<any>event.dataTransfer).setDragImage(createImage(<string>this.dragImage, 0, 0));
                     } else if (isFunction(this.dragImage)) {
-                        (<any>event.dataTransfer).setDragImage(callFun(<Function>this.dragImage));
+                        (<any>event.dataTransfer).setDragImage(callFun(<Function>this.dragImage, 0, 0));
                     } else {
                         let img: DragImage = <DragImage>this.dragImage;
                         (<any>event.dataTransfer).setDragImage(img.imageElement, img.x_offset, img.y_offset);

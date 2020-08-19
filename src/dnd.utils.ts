@@ -27,7 +27,7 @@ export function isFunction(obj: any) {
  * Create Image element with specified url string
  */
 export function createImage(src: string) {
-    let img:HTMLImageElement = new HTMLImageElement();
+    let img:HTMLImageElement = document.createElement('img');
     img.src = src;
     return img;
 }
