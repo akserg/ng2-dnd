@@ -835,6 +835,7 @@ export class AppComponent {
     }
   }
 }
+```
 
 # Credits
 - [Francesco Cina](https://github.com/ufoscout)
