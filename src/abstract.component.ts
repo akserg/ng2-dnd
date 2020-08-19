@@ -126,7 +126,7 @@ export abstract class AbstractComponent {
             this._target = event.target;
         };
         this._elem.ondragstart = (event: DragEvent) => {
-            if (this._dragHandle) {
+            if (this._dragHandle && this._dragEnabled) {
                 if (!this._dragHandle.contains(<Element>this._target)) {
                     event.preventDefault();
                     return;

@@ -91,7 +91,11 @@ export class DraggableComponent extends AbstractComponent {
         this._dragDropService.isDragged = true;
         this._dragDropService.dragData = this.dragData;
         this._dragDropService.onDragSuccessCallback = this.onDragSuccessCallback;
-        this._elem.classList.add(this._config.onDragStartClass);
+        setTimeout(() => {
+            // The DOM changes when adding the CSS class, so we need to add the setTimeout for Chrome
+            // see https://stackoverflow.com/questions/19639969/html5-dragend-event-firing-immediately
+            this._elem.classList.add(this._config.onDragStartClass);
+        });
         //
         this.onDragStart.emit({dragData: this.dragData, mouseEvent: event});
     }

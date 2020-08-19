@@ -69,13 +69,15 @@ describe('Drag and Drop with draggable data', () => {
 
         triggerEvent(dragElem, 'dragstart', 'MouseEvent');
         componentFixture.detectChanges();
-        expect(dragElem.classList.contains(config.onDragStartClass)).toEqual(true);
+        setTimeout(function() {
+            expect(dragElem.classList.contains(config.onDragStartClass)).toEqual(true);
 
-        triggerEvent(dragElem, 'dragend', 'MouseEvent');
-        componentFixture.detectChanges();
-        expect(dragElem.classList.contains(config.onDragStartClass)).toEqual(false);
+            triggerEvent(dragElem, 'dragend', 'MouseEvent');
+            componentFixture.detectChanges();
+            expect(dragElem.classList.contains(config.onDragStartClass)).toEqual(false);
 
-        done();
+            done();
+        }, 1);
     });
 
     it('Drag start event should not be activated if drag is not enabled', (done:any) => {
