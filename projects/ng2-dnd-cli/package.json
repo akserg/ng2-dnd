@@ -1,0 +1,11 @@
+{
+  "name": "ng2-dnd-cli",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^11.0.1",
+    "@angular/core": "^11.0.1"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}

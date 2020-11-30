@@ -1,27 +1,25 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "noImplicitAny": true,
-    "module": "es2015",
-    "target": "es5",
-    "emitDecoratorMetadata": true,
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "declaration": true,
     "moduleResolution": "node",
-    "types": [
-      "hammerjs",
-      "jasmine",
-      "node"
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
     ],
-    "lib": ["es2015", "dom"]
-  },
-  "files": [
-    "public_api.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
-  "angularCompilerOptions": {
-    "strictMetadataEmit": true,
-    "skipTemplateCodegen": true
+    "paths": {
+      "ng2-dnd-cli": [
+        "dist/ng2-dnd-cli/ng2-dnd-cli",
+        "dist/ng2-dnd-cli"
+      ]
+    }
   }
 }
