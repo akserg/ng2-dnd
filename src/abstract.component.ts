@@ -2,15 +2,16 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/akserg/ng2-dnd
 
-import {Injectable, ChangeDetectorRef, ViewRef} from '@angular/core';
-import {ElementRef} from '@angular/core';
+import { ChangeDetectorRef, ViewRef, NgZone, Renderer2, OnDestroy, Injectable } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
-import { DragDropConfig, DragImage } from './dnd.config';
+import { DragDropAllowedOperation, DragDropConfig, DragImage } from './dnd.config';
 import { DragDropService } from './dnd.service';
 import { isString, isFunction, isPresent, createImage, callFun } from './dnd.utils';
 
 @Injectable()
-export abstract class AbstractComponent {
+export abstract class AbstractComponent implements OnDestroy {
+    _unlisteners: (() => void)[] = []
     _elem: HTMLElement;
     _dragHandle: HTMLElement;
     _dragHelper: HTMLElement;
@@ -40,7 +41,7 @@ export abstract class AbstractComponent {
     /**
      * Drag effect
      */
-    effectAllowed: string;
+    effectAllowed: DragDropAllowedOperation;
     /**
      * Drag cursor
      */
@@ -91,98 +92,119 @@ export abstract class AbstractComponent {
 
     cloneItem: boolean = false;
 
-    constructor(elemRef: ElementRef, public _dragDropService: DragDropService, public _config: DragDropConfig,
-        private _cdr: ChangeDetectorRef) {
+    constructor(
+        elemRef: ElementRef,
+        public _dragDropService: DragDropService,
+        public _config: DragDropConfig,
+        private _cdr: ChangeDetectorRef,
+        private _renderer: Renderer2,
+        private _zone: NgZone) {
 
         // Assign default cursor unless overridden
         this._defaultCursor = _config.defaultCursor;
         this._elem = elemRef.nativeElement;
         this._elem.style.cursor = this._defaultCursor;  // set default cursor on our element
-        //
-        // DROP events
-        //
-        this._elem.ondragenter = (event: Event) => {
-            this._onDragEnter(event);
-        };
-        this._elem.ondragover = (event: DragEvent) => {
-            this._onDragOver(event);
-            //
-            if (event.dataTransfer != null) {
-                event.dataTransfer.dropEffect = this._config.dropEffect.name;
-            }
 
-            return false;
-        };
-        this._elem.ondragleave = (event: Event) => {
-            this._onDragLeave(event);
-        };
-        this._elem.ondrop = (event: Event) => {
-            this._onDrop(event);
-        };
-        //
-        // Drag events
-        //
-        this._elem.onmousedown = (event: MouseEvent) => {
-            this._target = event.target;
-        };
-        this._elem.ondragstart = (event: DragEvent) => {
-            if (this._dragHandle) {
-                if (!this._dragHandle.contains(<Element>this._target)) {
-                    event.preventDefault();
-                    return;
+        this._zone.runOutsideAngular(() => {
+
+            //
+            // Drop events
+            //
+            this._unlisteners.push(this._renderer.listen(this._elem, 'dragenter', (event: Event) => {
+                this._onDragEnter(event);
+            }));
+
+
+            this._unlisteners.push(this._renderer.listen(this._elem, 'dragover', (event: DragEvent) => {
+                this._onDragOver(event);
+                //
+                if (event.dataTransfer != null) {
+                    event.dataTransfer.dropEffect = this._config.dropEffect.name;
                 }
-            }
 
-            this._onDragStart(event);
+                return false;
+            }));
+
+            this._unlisteners.push(this._renderer.listen(this._elem, 'dragleave', (event: Event) => {
+                this._onDragLeave(event);
+            }));
+
+            this._unlisteners.push(this._renderer.listen(this._elem, 'drop', (event: Event) => {
+                this._onDrop(event);
+            }));
+
             //
-            if (event.dataTransfer != null) {
-                event.dataTransfer.setData('text', '');
-                // Change drag effect
-                event.dataTransfer.effectAllowed = this.effectAllowed || this._config.dragEffect.name;
-                // Change drag image
-                if (isPresent(this.dragImage)) {
-                    if (isString(this.dragImage)) {
-                        (<any>event.dataTransfer).setDragImage(createImage(<string>this.dragImage));
-                    } else if (isFunction(this.dragImage)) {
-                        (<any>event.dataTransfer).setDragImage(callFun(<Function>this.dragImage));
-                    } else {
-                        let img: DragImage = <DragImage>this.dragImage;
-                        (<any>event.dataTransfer).setDragImage(img.imageElement, img.x_offset, img.y_offset);
+            // Drag events
+            //
+            this._unlisteners.push(this._renderer.listen(this._elem, 'mousedown', (event: MouseEvent) => {
+                this._target = event.target;
+            }));
+
+            this._unlisteners.push(this._renderer.listen(this._elem, 'dragstart', (event: DragEvent) => {
+                if (this._dragHandle) {
+                    if (!this._dragHandle.contains(<Element>this._target)) {
+                        event.preventDefault();
+                        return;
                     }
-                } else if (isPresent(this._config.dragImage)) {
-                    let dragImage: DragImage = this._config.dragImage;
-                    (<any>event.dataTransfer).setDragImage(dragImage.imageElement, dragImage.x_offset, dragImage.y_offset);
-                } else if (this.cloneItem) {
-                    this._dragHelper = <HTMLElement>this._elem.cloneNode(true);
-                    this._dragHelper.classList.add('dnd-drag-item');
-                    this._dragHelper.style.position = "absolute";
-                    this._dragHelper.style.top = "0px";
-                    this._dragHelper.style.left = "-1000px";
-                    this._elem.parentElement.appendChild(this._dragHelper);
-                    (<any>event.dataTransfer).setDragImage(this._dragHelper, event.offsetX, event.offsetY);
                 }
 
-                // Change drag cursor
+                this._onDragStart(event);
+                //
+                if (event.dataTransfer != null) {
+                    event.dataTransfer.setData('text', '');
+                    // Change drag effect
+                    event.dataTransfer.effectAllowed = this.effectAllowed || this._config.dragEffect.name;
+                    // Change drag image
+                    if (isPresent(this.dragImage)) {
+                        if (isString(this.dragImage)) {
+                            (<any>event.dataTransfer).setDragImage(createImage(<string>this.dragImage));
+                        } else if (isFunction(this.dragImage)) {
+                            (<any>event.dataTransfer).setDragImage(callFun(<Function>this.dragImage));
+                        } else {
+                            let img: DragImage = <DragImage>this.dragImage;
+                            (<any>event.dataTransfer).setDragImage(img.imageElement, img.x_offset, img.y_offset);
+                        }
+                    } else if (isPresent(this._config.dragImage)) {
+                        let dragImage: DragImage = this._config.dragImage;
+                        (<any>event.dataTransfer).setDragImage(dragImage.imageElement, dragImage.x_offset, dragImage.y_offset);
+                    } else if (this.cloneItem) {
+                        this._dragHelper = <HTMLElement>this._elem.cloneNode(true);
+                        this._dragHelper.classList.add('dnd-drag-item');
+                        this._dragHelper.style.position = "absolute";
+                        this._dragHelper.style.top = "0px";
+                        this._dragHelper.style.left = "-1000px";
+                        this._elem.parentElement.appendChild(this._dragHelper);
+                        (<any>event.dataTransfer).setDragImage(this._dragHelper, event.offsetX, event.offsetY);
+                    }
+
+                    // Change drag cursor
+                    let cursorelem = (this._dragHandle) ? this._dragHandle : this._elem;
+
+                    if (this._dragEnabled) {
+                        cursorelem.style.cursor = this.effectCursor ? this.effectCursor : this._config.dragCursor;
+                    } else {
+                        cursorelem.style.cursor = this._defaultCursor;
+                    }
+                }
+            }));
+
+            this._unlisteners.push(this._renderer.listen(this._elem, 'dragend', (event: Event) => {
+                if (this._elem.parentElement && this._dragHelper) {
+                    this._elem.parentElement.removeChild(this._dragHelper);
+                }
+                // console.log('ondragend', event.target);
+                this._onDragEnd(event);
+                // Restore style of dragged element
                 let cursorelem = (this._dragHandle) ? this._dragHandle : this._elem;
+                cursorelem.style.cursor = this._defaultCursor;
+            }));
+        });
+    }
 
-                if (this._dragEnabled) {
-                    cursorelem.style.cursor = this.effectCursor ? this.effectCursor : this._config.dragCursor;
-                } else {
-                    cursorelem.style.cursor = this._defaultCursor;
-                }
-            }
-        };
-
-        this._elem.ondragend = (event: Event) => {
-            if (this._elem.parentElement && this._dragHelper) {
-                this._elem.parentElement.removeChild(this._dragHelper);
-            }
-            // console.log('ondragend', event.target);
-            this._onDragEnd(event);
-            // Restore style of dragged element
-            let cursorelem = (this._dragHandle) ? this._dragHandle : this._elem;
-            cursorelem.style.cursor = this._defaultCursor;
-        };
+    public ngOnDestroy(): void {
+        for (const unListener of this._unlisteners) {
+            unListener();
+        }
     }
 
     public setDragHandle(elem: HTMLElement) {
@@ -190,10 +212,10 @@ export abstract class AbstractComponent {
     }
     /******* Change detection ******/
 
-    detectChanges () {
+    detectChanges() {
         // Programmatically run change detection to fix issue in Safari
         setTimeout(() => {
-            if ( this._cdr && !(this._cdr as ViewRef).destroyed ) {
+            if (this._cdr && !(this._cdr as ViewRef).destroyed) {
                 this._cdr.detectChanges();
             }
         }, 250);

@@ -2,17 +2,17 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/akserg/ng2-dnd
 
-import {ChangeDetectorRef} from '@angular/core';
-import {Directive, Input, Output, EventEmitter, ElementRef} from '@angular/core';
+import { ChangeDetectorRef, NgZone, Renderer2 } from '@angular/core';
+import { Directive, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
-import {AbstractComponent} from './abstract.component';
-import {DragDropConfig} from './dnd.config';
-import {DragDropService, DragDropData} from './dnd.service';
+import { AbstractComponent } from './abstract.component';
+import { DragDropAllowedOperation, DragDropConfig } from './dnd.config';
+import { DragDropService, DragDropData } from './dnd.service';
 
 @Directive({ selector: '[dnd-droppable]' })
 export class DroppableComponent extends AbstractComponent {
 
-    @Input("dropEnabled") set droppable(value:boolean) {
+    @Input("dropEnabled") set droppable(value: boolean) {
         this.dropEnabled = !!value;
     }
 
@@ -29,14 +29,14 @@ export class DroppableComponent extends AbstractComponent {
         this.allowDrop = value;
     }
 
-    @Input("dropZones") set dropzones(value:Array<string>) {
+    @Input("dropZones") set dropzones(value: Array<string>) {
         this.dropZones = value;
     }
 
     /**
      * Drag allowed effect
      */
-    @Input("effectAllowed") set effectallowed(value: string) {
+    @Input("effectAllowed") set effectallowed(value: DragDropAllowedOperation) {
         this.effectAllowed = value;
     }
 
@@ -47,45 +47,50 @@ export class DroppableComponent extends AbstractComponent {
         this.effectCursor = value;
     }
 
-    constructor(elemRef: ElementRef, dragDropService: DragDropService, config:DragDropConfig,
-        cdr:ChangeDetectorRef) {
+    constructor(
+        elemRef: ElementRef,
+        dragDropService: DragDropService,
+        config: DragDropConfig,
+        cdr: ChangeDetectorRef,
+        private renderer: Renderer2,
+        zone: NgZone) {
 
-        super(elemRef, dragDropService, config, cdr);
+        super(elemRef, dragDropService, config, cdr, renderer, zone);
 
         this.dropEnabled = true;
     }
 
     _onDragEnterCallback(event: MouseEvent) {
         if (this._dragDropService.isDragged) {
-            this._elem.classList.add(this._config.onDragEnterClass);
-            this.onDragEnter.emit({dragData: this._dragDropService.dragData, mouseEvent: event});
+            this.renderer.addClass(this._elem, this._config.onDragEnterClass);
+            this.onDragEnter.emit({ dragData: this._dragDropService.dragData, mouseEvent: event });
         }
     }
 
-    _onDragOverCallback (event: MouseEvent) {
+    _onDragOverCallback(event: MouseEvent) {
         if (this._dragDropService.isDragged) {
-            this._elem.classList.add(this._config.onDragOverClass);
-            this.onDragOver.emit({dragData: this._dragDropService.dragData, mouseEvent: event});
+            this.renderer.addClass(this._elem, this._config.onDragOverClass);
+            this.onDragOver.emit({ dragData: this._dragDropService.dragData, mouseEvent: event });
         }
     };
 
-    _onDragLeaveCallback (event: MouseEvent) {
+    _onDragLeaveCallback(event: MouseEvent) {
         if (this._dragDropService.isDragged) {
-            this._elem.classList.remove(this._config.onDragOverClass);
-            this._elem.classList.remove(this._config.onDragEnterClass);
-            this.onDragLeave.emit({dragData: this._dragDropService.dragData, mouseEvent: event});
+            this.renderer.removeClass(this._elem, this._config.onDragOverClass);
+            this.renderer.removeClass(this._elem, this._config.onDragEnterClass);
+            this.onDragLeave.emit({ dragData: this._dragDropService.dragData, mouseEvent: event });
         }
     };
 
-    _onDropCallback (event: MouseEvent) {
+    _onDropCallback(event: MouseEvent) {
         let dataTransfer = (event as any).dataTransfer;
         if (this._dragDropService.isDragged || (dataTransfer && dataTransfer.files)) {
-            this.onDropSuccess.emit({dragData: this._dragDropService.dragData, mouseEvent: event});
+            this.onDropSuccess.emit({ dragData: this._dragDropService.dragData, mouseEvent: event });
             if (this._dragDropService.onDragSuccessCallback) {
-                this._dragDropService.onDragSuccessCallback.emit({dragData: this._dragDropService.dragData, mouseEvent: event});
+                this._dragDropService.onDragSuccessCallback.emit({ dragData: this._dragDropService.dragData, mouseEvent: event });
             }
-            this._elem.classList.remove(this._config.onDragOverClass);
-            this._elem.classList.remove(this._config.onDragEnterClass);
+            this.renderer.removeClass(this._elem, this._config.onDragOverClass);
+            this.renderer.removeClass(this._elem, this._config.onDragEnterClass);
         }
     }
 }

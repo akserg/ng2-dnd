@@ -2,17 +2,17 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/akserg/ng2-dnd
 
-import {ChangeDetectorRef} from '@angular/core';
-import {Directive, Input, Output, EventEmitter, ElementRef} from '@angular/core';
+import { ChangeDetectorRef, NgZone, Renderer2 } from '@angular/core';
+import { Directive, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
-import {AbstractComponent, AbstractHandleComponent} from './abstract.component';
-import {DragDropConfig, DragImage} from './dnd.config';
-import {DragDropService, DragDropData} from './dnd.service';
+import { AbstractComponent, AbstractHandleComponent } from './abstract.component';
+import { DragDropAllowedOperation, DragDropConfig, DragImage } from './dnd.config';
+import { DragDropService, DragDropData } from './dnd.service';
 
 @Directive({ selector: '[dnd-draggable]' })
 export class DraggableComponent extends AbstractComponent {
 
-    @Input("dragEnabled") set draggable(value:boolean) {
+    @Input("dragEnabled") set draggable(value: boolean) {
         this.dragEnabled = !!value;
     }
 
@@ -33,14 +33,14 @@ export class DraggableComponent extends AbstractComponent {
      */
     @Output("onDragSuccess") onDragSuccessCallback: EventEmitter<any> = new EventEmitter<any>();
 
-    @Input("dropZones") set dropzones(value:Array<string>) {
+    @Input("dropZones") set dropzones(value: Array<string>) {
         this.dropZones = value;
     }
 
     /**
      * Drag allowed effect
      */
-    @Input("effectAllowed") set effectallowed(value: string) {
+    @Input("effectAllowed") set effectallowed(value: DragDropAllowedOperation) {
         this.effectAllowed = value;
     }
 
@@ -76,13 +76,18 @@ export class DraggableComponent extends AbstractComponent {
      */
     @Input() dragImage: string | DragImage | Function;
 
-    
+
     @Input() cloneItem: boolean;
 
-    constructor(elemRef: ElementRef, dragDropService: DragDropService, config:DragDropConfig,
-        cdr:ChangeDetectorRef) {
+    constructor(
+        elemRef: ElementRef,
+        dragDropService: DragDropService,
+        config: DragDropConfig,
+        cdr: ChangeDetectorRef,
+        private renderer: Renderer2,
+        private zone: NgZone) {
 
-        super(elemRef, dragDropService, config, cdr);
+        super(elemRef, dragDropService, config, cdr, renderer, zone);
         this._defaultCursor = this._elem.style.cursor;
         this.dragEnabled = true;
     }
@@ -91,26 +96,26 @@ export class DraggableComponent extends AbstractComponent {
         this._dragDropService.isDragged = true;
         this._dragDropService.dragData = this.dragData;
         this._dragDropService.onDragSuccessCallback = this.onDragSuccessCallback;
-        this._elem.classList.add(this._config.onDragStartClass);
+        this.renderer.addClass(this._elem, this._config.onDragStartClass);
         //
-        this.onDragStart.emit({dragData: this.dragData, mouseEvent: event});
+        this.onDragStart.emit({ dragData: this.dragData, mouseEvent: event });
     }
 
     _onDragEndCallback(event: MouseEvent) {
         this._dragDropService.isDragged = false;
         this._dragDropService.dragData = null;
         this._dragDropService.onDragSuccessCallback = null;
-        this._elem.classList.remove(this._config.onDragStartClass);
+        this.renderer.removeClass(this._elem, this._config.onDragStartClass);
         //
-        this.onDragEnd.emit({dragData: this.dragData, mouseEvent: event});
+        this.onDragEnd.emit({ dragData: this.dragData, mouseEvent: event });
     }
 }
 
 
 @Directive({ selector: '[dnd-draggable-handle]' })
 export class DraggableHandleComponent extends AbstractHandleComponent {
-    constructor(elemRef: ElementRef, dragDropService: DragDropService, config:DragDropConfig, _Component: DraggableComponent,
-        cdr:ChangeDetectorRef) {
+    constructor(elemRef: ElementRef, dragDropService: DragDropService, config: DragDropConfig, _Component: DraggableComponent,
+        cdr: ChangeDetectorRef) {
 
         super(elemRef, dragDropService, config, _Component, cdr);
     }

@@ -2,7 +2,10 @@
 // This project is licensed under the terms of the MIT license.
 // https://github.com/akserg/ng2-dnd
 
-import {isString} from './dnd.utils';
+import { isString } from './dnd.utils';
+
+export type DragDropOperation = "none" | "copy" | "link" | "move";
+export type DragDropAllowedOperation = DragDropOperation | "copyLink" | "copyMove" | "linkMove" | "all" | "uninitialized"
 
 export class DataTransferEffect {
 
@@ -11,7 +14,7 @@ export class DataTransferEffect {
     static MOVE = new DataTransferEffect('move');
     static NONE = new DataTransferEffect('none');
 
-    constructor(public name: string) { }
+    constructor(public name: DragDropOperation) { }
 }
 
 export class DragImage {
@@ -19,13 +22,13 @@ export class DragImage {
         public imageElement: any,
         public x_offset: number = 0,
         public y_offset: number = 0) {
-            if (isString(this.imageElement)) {
-                // Create real image from string source
-                let imgScr: string = <string>this.imageElement;
-                this.imageElement = new HTMLImageElement();
-                (<HTMLImageElement>this.imageElement).src = imgScr;
-            }
+        if (isString(this.imageElement)) {
+            // Create real image from string source
+            let imgScr: string = <string>this.imageElement;
+            this.imageElement = new HTMLImageElement();
+            (<HTMLImageElement>this.imageElement).src = imgScr;
         }
+    }
 }
 
 export class DragDropConfig {

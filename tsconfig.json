@@ -1,27 +1,19 @@
 {
   "compilerOptions": {
     "noImplicitAny": true,
-    "module": "es2015",
-    "target": "es5",
-    "emitDecoratorMetadata": true,
+    "module": "es2020",
+    "target": "es2020",
     "experimentalDecorators": true,
-    "declaration": true,
+    "declaration": false,
     "moduleResolution": "node",
-    "types": [
-      "hammerjs",
-      "jasmine",
-      "node"
-    ],
-    "lib": ["es2015", "dom"]
+    "types": ["hammerjs", "jasmine", "node"],
+    "lib": ["es2020", "dom"]
   },
-  "files": [
-    "public_api.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "files": ["public_api.ts"],
+  "exclude": ["node_modules"],
   "angularCompilerOptions": {
-    "strictMetadataEmit": true,
-    "skipTemplateCodegen": true
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
   }
 }
