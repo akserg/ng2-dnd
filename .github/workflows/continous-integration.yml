@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  pull_request:
+    branches: [ "master", "release/*", "support/*" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Checkout branch
+      uses: actions/checkout@v3
+
+    - name: Install node
+      uses: actions/setup-node@v3
+      with:
+          node-version: 16
+
+    - name: Install packages
+      run: npm install
+
+    - name: Run tests
+      uses: coactions/setup-xvfb@v1.0.1
+      with:
+        run: npm test
+
+    - name: Build
+      run: npm run build

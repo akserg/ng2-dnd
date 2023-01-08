@@ -1,0 +1,107 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Publish package into npm
+
+#on:
+#  release:
+#    types: [created]
+on:
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+    inputs:
+      number:
+        description: Pull Request number
+        required: true
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Pull Request
+        id: pull-request
+        uses: actions/github-script@v3
+        with:
+          script: |
+            let pullRequest = null;
+            if (context.payload.inputs && context.payload.inputs.number) {
+              // find Pull Request by number fom input
+              const number = context.payload.inputs.number;
+              try {
+                pullRequest = (await github.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: number,
+                })).data;
+              } catch(e) {
+                core.error(`Cannot get Pull Request #${number}: ${e}`);
+                return;
+              }
+            } else {
+              // get Pull Request from event payload
+              pullRequest = context.payload.pull_request;
+            }
+            if (!pullRequest) {
+              core.error(`Cannot find Pull Request`);
+              return;
+            }
+            // Stop if Pull request is not merged
+            if (!pullRequest.merged) {
+              core.info(`Pull Request ${pullRequest.number} is not merged, skipping`);
+              return;
+            }
+            // Stop if Pull Request branch name does not start with `release`
+            const branch = pullRequest.head.ref;
+            if (!branch.startsWith('release')) {
+              core.info(`This is not a release branch ${branch}, skipping`);
+              return;
+            }
+            core.setOutput('branch', branch);
+            core.setOutput('base', pullRequest.base.ref);
+            core.setOutput('number', pullRequest.number);
+            core.setOutput('url', pullRequest.html_url);
+            core.setOutput('body', pullRequest.body);
+            core.setOutput('suffix', `[#${pullRequest.number}](${pullRequest.html_url})`);
+            return true;
+
+      - name: Checkout Pull Request base branch
+        if: steps.pull-request.outputs.result
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.pull-request.outputs.base }}
+
+      - name: Set up Node.js
+        if: steps.pull-request.outputs.result
+        uses: actions/setup-node@v3
+        with:
+          registry-url: https://registry.npmjs.org/
+          node-version: 16
+
+      - name: Set next version
+        id: set-next-version
+        if: steps.pull-request.outputs.result
+        uses: vemel/nextversion@0.1.1
+        with:
+          path: package.json
+          type: semver
+          release: rc
+          update: package.json
+      
+      - name: Get result
+        run: echo "${{steps.set-next-version.outputs.result}}"
+  
+      # - name: Install package
+        # if: steps.pull-request.outputs.result
+        # run: npm ci
+
+      # - name: Build
+        # if: steps.pull-request.outputs.result
+        # run: npm run build
+
+      # - name: Publish package
+        # if: steps.pull-request.outputs.result
+        # run: cd dist && npm publish
+        # env:
+          # NODE_AUTH_TOKEN: ${{secrets.npm_token}}
