@@ -1,45 +1,23 @@
-# Angular 2 Drag-and-Drop [![npm version](https://badge.fury.io/js/ng2-dnd.svg)](https://badge.fury.io/js/ng2-dnd) [![npm monthly downloads](https://img.shields.io/npm/dm/ng2-dnd.svg?style=flat-square)](https://www.npmjs.com/package/ng2-dnd)
-Angular 2 Drag-and-Drop without dependencies.
+# Angular X Drag-and-Drop 
 
-Follow me [![twitter](https://img.shields.io/twitter/follow/akopkokhyants.svg?style=social&label=%20akopkokhyants)](https://twitter.com/akopkokhyants) to be notified about new releases.
+Angular X Drag-and-Drop.
 
-[![Build Status](https://travis-ci.org/akserg/ng2-dnd.svg?branch=master)](https://travis-ci.org/akserg/ng2-dnd)
-[![Dependency Status](https://david-dm.org/akserg/ng2-dnd.svg)](https://david-dm.org/akserg/ng2-dnd)
-[![devDependency Status](https://david-dm.org/akserg/ng2-dnd/dev-status.svg)](https://david-dm.org/akserg/ng2-dnd#info=devDependencies)
-[![Known Vulnerabilities](https://snyk.io/test/github/akserg/ng2-dnd/badge.svg)](https://snyk.io/test/github/akserg/ng2-dnd)
+[![Build](https://github.com/SuezSmartSolutions/ngx-dnd/actions/workflows/continous-integration.yml/badge.svg)](https://github.com/SuezSmartSolutions/ngx-dnd/actions/workflows/continous-integration.yml)
 
 _Some of these APIs and Components are not final and are subject to change!_
 
-## Transpilation to Angular Package Format
-The library uses [ng-packagr](https://github.com/dherges/ng-packagr) to transpile into the Angular Package Format:
-- Bundles library in `FESM2015`, `FESM5`, and `UMD` formats
-- The npm package can be consumed by `Angular CLI`, `Webpack`, or `SystemJS`
-- Creates type definitions (`.d.ts`)
-- Generates Ahead-of-Time metadata (`.metadata.json`)
-- Auto-discovers and bundles secondary entry points such as `@my/foo`, `@my/foo/testing`, `@my/foo/bar`
-
 ## Installation
 ```bash
-npm install ng2-dnd --save
+npm install @suez/ngx-dnd --save
 ```
 
 ## Demo
-- Webpack demo available [here](https://angular-dxqjhj.stackblitz.io)
-- SystemJS demo available [here](http://embed.plnkr.co/JbG8Si)
+- Angular demo available [here](https://suezsmartsolutions.github.io/ngx-dnd-demo/)
 
 ## Usage
-If you use SystemJS to load your files, you might have to update your config:
-
-```js
-System.config({
-    map: {
-        'ng2-dnd': 'node_modules/ng2-dnd/bundles/ng2-dnd.umd.js'
-    }
-});
-```
 
 #### 1. Add the default styles
-- Import the `style.css` into your web page from `node_modules/ng2-dnd/bundles/style.css`
+- Import the `style.css` into your web page from `node_modules/@suez/ngx-dnd/style.css`
 
 #### 2. Import the `DndModule`
 Import `DndModule.forRoot()` in the NgModule of your application. 
@@ -48,7 +26,7 @@ The `forRoot` method is a convention for modules that provide a singleton servic
 ```ts
 import {BrowserModule} from "@angular/platform-browser";
 import {NgModule} from '@angular/core';
-import {DndModule} from 'ng2-dnd';
+import {DndModule} from '@suez/ngx-dnd';
 
 @NgModule({
     imports: [
@@ -759,7 +737,7 @@ Since it is possible to drag and drop one or more files to a drop zone, you need
 ```js
 import {Component} from '@angular/core';
 import {Http, Headers} from '@angular/http';
-import {DND_PROVIDERS, DND_DIRECTIVES} from 'ng2-dnd/ng2-dnd';
+import {DND_PROVIDERS, DND_DIRECTIVES} from '@suez/ngx-dnd';
 import {bootstrap} from '@angular/platform-browser-dynamic';
 
 bootstrap(AppComponent, [
@@ -837,6 +815,7 @@ export class AppComponent {
 }
 
 # Credits
+- [Sergey Akopkokhyants](https://github.com/akserg)
 - [Francesco Cina](https://github.com/ufoscout)
 - [Valerii Kuznetsov](https://github.com/solival)
 - [Shane Oborn](https://github.com/obosha)
